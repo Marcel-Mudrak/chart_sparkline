@@ -74,6 +74,7 @@ class Sparkline extends StatelessWidget {
     this.xValueShow = false,
     this.xValueStyle = const TextStyle(
         color: Colors.black87, fontSize: 10.0, fontWeight: FontWeight.bold),
+    this.extraValues,
     this.backgroundColor,
     this.lineWidth = 1.0,
     this.lineColor = Colors.blue,
@@ -311,6 +312,9 @@ class Sparkline extends StatelessWidget {
   /// xValueStyle
   final TextStyle xValueStyle;
 
+  /// extraValues
+  final List<String>? extraValues;
+
   /// animationController
   final AnimationController? animationController;
 
@@ -327,6 +331,7 @@ class Sparkline extends StatelessWidget {
           backgroundColor: backgroundColor,
           xLabels: xLabels,
           xLabelsStyle: xLabelsStyle,
+          extraValues: extraValues,
           xValueShow: xValueShow,
           xValueStyle: xValueStyle,
           //
@@ -387,6 +392,7 @@ class _SparklinePainter extends CustomPainter {
     required this.xLabelsStyle,
     required this.xValueShow,
     required this.xValueStyle,
+    required this.extraValues,
     required this.lineWidth,
     required this.lineColor,
     required this.lineGradient,
@@ -434,6 +440,7 @@ class _SparklinePainter extends CustomPainter {
   final List<String> xLabels;
   final TextStyle xLabelsStyle;
   final bool xValueShow;
+  final List<String>? extraValues;
   final TextStyle xValueStyle;
   final double lineWidth;
   final Color lineColor;
@@ -876,11 +883,13 @@ class _SparklinePainter extends CustomPainter {
     if (xValueShow) {
       for (int i = 0; i < dataPoints.length; i++) {
         var spPainter = TextPainter(
-            text: TextSpan(
-              text: '${dataPoints[i]}',
-              style: xValueStyle,
-            ),
-            textDirection: TextDirection.ltr);
+          text: TextSpan(
+            text:
+                '${dataPoints[i]}${extraValues != null ? '/${extraValues![i]}' : ''}',
+            style: xValueStyle,
+          ),
+          textDirection: TextDirection.ltr,
+        );
         spPainter.layout();
         var normalizedOffset = normalized[i];
 
