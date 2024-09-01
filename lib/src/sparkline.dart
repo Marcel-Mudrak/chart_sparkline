@@ -72,6 +72,8 @@ class Sparkline extends StatelessWidget {
     this.xLabelsStyle = const TextStyle(
         color: Colors.black87, fontSize: 10.0, fontWeight: FontWeight.bold),
     this.xValueShow = false,
+    this.xValueStyle = const TextStyle(
+        color: Colors.black87, fontSize: 10.0, fontWeight: FontWeight.bold),
     this.backgroundColor,
     this.lineWidth = 1.0,
     this.lineColor = Colors.blue,
@@ -306,6 +308,9 @@ class Sparkline extends StatelessWidget {
   /// xValueShow
   final bool xValueShow;
 
+  /// xValueStyle
+  final TextStyle xValueStyle;
+
   /// animationController
   final AnimationController? animationController;
 
@@ -323,6 +328,7 @@ class Sparkline extends StatelessWidget {
           xLabels: xLabels,
           xLabelsStyle: xLabelsStyle,
           xValueShow: xValueShow,
+          xValueStyle: xValueStyle,
           //
           lineWidth: lineWidth,
           lineColor: lineColor,
@@ -380,6 +386,7 @@ class _SparklinePainter extends CustomPainter {
     required this.xLabels,
     required this.xLabelsStyle,
     required this.xValueShow,
+    required this.xValueStyle,
     required this.lineWidth,
     required this.lineColor,
     required this.lineGradient,
@@ -427,6 +434,7 @@ class _SparklinePainter extends CustomPainter {
   final List<String> xLabels;
   final TextStyle xLabelsStyle;
   final bool xValueShow;
+  final TextStyle xValueStyle;
   final double lineWidth;
   final Color lineColor;
   final Gradient? lineGradient;
@@ -508,11 +516,12 @@ class _SparklinePainter extends CustomPainter {
 
     if (xLabels.isNotEmpty) {
       var spPainter = TextPainter(
-          text: TextSpan(
-            text: xLabels[0],
-            style: xLabelsStyle,
-          ),
-          textDirection: TextDirection.ltr);
+        text: TextSpan(
+          text: xLabels[0],
+          style: xLabelsStyle,
+        ),
+        textDirection: TextDirection.ltr,
+      );
       spPainter.layout();
       size = Size(size.width, size.height - spPainter.height);
     }
@@ -868,11 +877,9 @@ class _SparklinePainter extends CustomPainter {
       for (int i = 0; i < dataPoints.length; i++) {
         var spPainter = TextPainter(
             text: TextSpan(
-                text: '${dataPoints[i]}',
-                style: TextStyle(
-                    color: gridLineColor,
-                    fontSize: 9.0,
-                    fontWeight: FontWeight.bold)),
+              text: '${dataPoints[i]}',
+              style: xValueStyle,
+            ),
             textDirection: TextDirection.ltr);
         spPainter.layout();
         var normalizedOffset = normalized[i];
