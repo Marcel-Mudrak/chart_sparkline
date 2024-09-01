@@ -72,6 +72,7 @@ class Sparkline extends StatelessWidget {
     this.xLabelsStyle = const TextStyle(
         color: Colors.black87, fontSize: 10.0, fontWeight: FontWeight.bold),
     this.xValueShow = false,
+    this.formatXValueAsInt = false,
     this.xValueStyle = const TextStyle(
         color: Colors.black87, fontSize: 10.0, fontWeight: FontWeight.bold),
     this.extraValues,
@@ -309,6 +310,9 @@ class Sparkline extends StatelessWidget {
   /// xValueShow
   final bool xValueShow;
 
+  /// formatXValueAsInt
+  final bool formatXValueAsInt;
+
   /// xValueStyle
   final TextStyle xValueStyle;
 
@@ -333,6 +337,7 @@ class Sparkline extends StatelessWidget {
           xLabelsStyle: xLabelsStyle,
           extraValues: extraValues,
           xValueShow: xValueShow,
+          formatXValueAsInt: formatXValueAsInt,
           xValueStyle: xValueStyle,
           //
           lineWidth: lineWidth,
@@ -391,6 +396,7 @@ class _SparklinePainter extends CustomPainter {
     required this.xLabels,
     required this.xLabelsStyle,
     required this.xValueShow,
+    required this.formatXValueAsInt,
     required this.xValueStyle,
     required this.extraValues,
     required this.lineWidth,
@@ -440,6 +446,7 @@ class _SparklinePainter extends CustomPainter {
   final List<String> xLabels;
   final TextStyle xLabelsStyle;
   final bool xValueShow;
+  final bool formatXValueAsInt;
   final List<String>? extraValues;
   final TextStyle xValueStyle;
   final double lineWidth;
@@ -885,7 +892,7 @@ class _SparklinePainter extends CustomPainter {
         var spPainter = TextPainter(
           text: TextSpan(
             text:
-                '${dataPoints[i]}${extraValues != null ? '/${extraValues![i]}' : ''}',
+                '${formatXValueAsInt ? dataPoints[i].toInt() : dataPoints[i]}${extraValues != null ? '/${extraValues![i].split('.')[0]}' : ''}',
             style: xValueStyle,
           ),
           textDirection: TextDirection.ltr,
